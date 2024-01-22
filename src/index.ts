@@ -33,7 +33,6 @@ abstract class TodoList {
   protected isFinished: boolean;
 
   protected tasks: ITask[] = [];
-
   public title: string;
   public body: string;
 
@@ -49,10 +48,6 @@ abstract class TodoList {
 
   public get allTasks(): ITask[] {
     return this.tasks;
-  }
-
-  public addTask(task: ITask): void {
-    this.tasks.push(task);
   }
 
   protected unfinishedTasks(): ITask[] {
@@ -75,15 +70,15 @@ abstract class TodoList {
     return this.tasks.find((task) => task.id === id);
   }
 
-  public addTask(task: ITask): void {
-    this.tasks.push(task);
-  }
-
   public deleteTask(id: number): void {
     this.tasks = this.tasks.filter((task) => task.id !== id);
   }
 
   public abstract editTask(task: ITask): void;
+
+  public addTask(task: ITask): void {
+    this.tasks.push(task);
+  }
 }
 
 class DefaultTodoList extends TodoList implements IEditableTask {
@@ -143,12 +138,11 @@ class FindTodoTask extends TodoList {
   }
 }
 
-class SortTask extends TodoList {
-  public editTask(task: ITask): void {
-    throw new Error("Editing functionality is not available for this class");
-  }
-
-  public sortTasks(compareFn: (a: ITask, b: ITask) => number): ITask[] {
-    return this.tasks.sort(compareFn);
+class SortTask {
+  public sortTasks(
+    compareFn: (a: ITask, b: ITask) => number,
+    tasks: ITask[]
+  ): ITask[] {
+    return tasks.slice().sort(compareFn);
   }
 }
